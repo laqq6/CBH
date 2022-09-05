@@ -62,8 +62,9 @@ def get_weather(region):
     # 生活指数详细描述
     indices_url = "https://devapi.qweather.com/v7/indices/1d?type=1,2&location={}&key={}".format(location_id, key)
     gg = get(indices_url, headers=headers).json()
-    text = gg["daily"][0]["text"]
-    return weather, temp, wind_dir, text,
+    text1 = gg["daily"][0]["text"]
+    text2 = gg["daily"][1]["text"]
+    return weather, temp, wind_dir, text1, text2,
 
 
 def get_birthday(birthday, year, today):
@@ -166,8 +167,12 @@ def send_message(to_user, access_token, region_name, weather, temp, wind_dir, te
                 "value": wind_dir,
                 "color": get_color()
             },
-            "text": {
-                "value": text,
+            "text1": {
+                "value": text1,
+                "color": get_color()
+            },
+            "text2": {
+                "value": text2,
                 "color": get_color()
             },
             "love_day": {
@@ -230,7 +235,7 @@ if __name__ == "__main__":
     users = config["user"]
     # 传入地区获取天气信息
     region = config["region"]
-    weather, temp, wind_dir, text = get_weather(region)
+    weather, temp, wind_dir, text1, text2 = get_weather(region)
     # text =  config["text"]
     note_ch = config["note_ch"]
     note_en = config["note_en"]
@@ -239,5 +244,5 @@ if __name__ == "__main__":
         note_ch, note_en = get_ciba()
     # 公众号推送消息
     for user in users:
-        send_message(user, accessToken, region, weather, temp, wind_dir, text, note_ch, note_en)
+        send_message(user, accessToken, region, weather, temp, wind_dir, text1, text2, note_en)
     os.system("pause")
