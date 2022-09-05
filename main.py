@@ -62,7 +62,7 @@ def get_weather(region):
     # 生活指数详细描述
     indices_url = "https://devapi.qweather.com/v7/indices/1d?type=1,2&location={}&key={}".format(location_id, key)
     gg = get(indices_url, headers=headers).json()
-    text = gg["daily"][0]["text"]
+    text = gg["daily"]
     return weather, temp, wind_dir, text,
  
 def get_birthday(birthday, year, today):
