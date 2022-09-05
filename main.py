@@ -51,7 +51,6 @@ def get_weather(region):
         # 获取地区的location--id
         location_id = response["location"][0]["id"]
     weather_url = "https://devapi.qweather.com/v7/weather/now?location={}&key={}".format(location_id, key)
-    indices_url = "https://devapi.qweather.com/v7/indices/1d?type=1,2&location={}&key={}".format(location_id, key)
     response = get(weather_url, headers=headers).json()
 
     # 天气
@@ -61,10 +60,10 @@ def get_weather(region):
     # 风向
     wind_dir = response["now"]["windDir"]
     # 生活指数详细描述
-    response = get(indices_url, headers=headers).json()
-    text = response["daily"]["text"]
+    indices_url = "https://devapi.qweather.com/v7/indices/1d?type=1,2&location={}&key={}".format(location_id, key)
+    gg = get(indices_url, headers=headers).json()
+    text = gg["daily[0]"]["text"]
     return weather, temp, wind_dir, text,
- 
  
 def get_birthday(birthday, year, today):
     birthday_year = birthday.split("-")[0]
