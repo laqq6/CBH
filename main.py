@@ -64,7 +64,10 @@ def get_weather(region):
     gg = get(indices_url, headers=headers).json()
     text1 = gg["daily"][0]["text"]
     text2 = gg["daily"][1]["text"]
-    return weather, temp, wind_dir, text1, text2,
+    warning_url = "https://devapi.qweather.com/v7/warning/now?location=101010100&key={}".format(location_id, key)
+    hh = get(warning_url, headers=headers).json()
+    text3 = hh["warning"]["text"]
+    return weather, temp, wind_dir, text1, text2, text3,
 
 
 def get_birthday(birthday, year, today):
@@ -121,7 +124,7 @@ def get_ciba():
     return note_ch, note_en
 
 
-def send_message(to_user, access_token, region_name, weather, temp, wind_dir, text1, text2, note_ch, note_en):
+def send_message(to_user, access_token, region_name, weather, temp, wind_dir, text1, text2, text3, note_ch, note_en):
     url = "https://api.weixin.qq.com/cgi-bin/message/template/send?access_token={}".format(access_token)
     week_list = ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"]
     year = localtime().tm_year
@@ -173,6 +176,10 @@ def send_message(to_user, access_token, region_name, weather, temp, wind_dir, te
             },
             "text2": {
                 "value": text2,
+                "color": get_color()
+            },
+            "text3": {
+                "value": text3,
                 "color": get_color()
             },
             "love_day": {
@@ -235,8 +242,7 @@ if __name__ == "__main__":
     users = config["user"]
     # 传入地区获取天气信息
     region = config["region"]
-    weather, temp, wind_dir, text1, text2 = get_weather(region)
-    # text =  config["text"]
+    weather, temp, wind_dir, text1, text2, text3 = get_weather(region)
     note_ch = config["note_ch"]
     note_en = config["note_en"]
     if note_ch == "" and note_en == "":
@@ -244,5 +250,5 @@ if __name__ == "__main__":
         note_ch, note_en = get_ciba()
     # 公众号推送消息
     for user in users:
-        send_message(user, accessToken, region, weather, temp, wind_dir, text1, text2, note_ch, note_en)
+        send_message(user, accessToken, region, weather, temp, wind_dir, text1, text2, text3, note_ch, note_en)
     os.system("pause")
