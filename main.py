@@ -64,9 +64,6 @@ def get_weather(region):
     gg = get(indices_url, headers=headers).json()
     text1 = gg["daily"][0]["text"]
     text2 = gg["daily"][1]["text"]
-#     warning_url = "https://devapi.qweather.com/v7/warning/now?location={}&key={}".format(location_id, key)
-#     hh = get(warning_url, headers=headers).json()
-#     text3 = hh["warning"]["text"]
     return weather, temp, wind_dir, text1, text2,
 
 
@@ -124,7 +121,7 @@ def get_ciba():
     return note_ch, note_en
 
 
-def send_message(to_user, access_token, region_name, weather, temp, wind_dir, text1, text2, love_day, note_ch, note_en):
+def send_message(to_user, access_token, region_name, weather, temp, wind_dir, text1, text2, note_ch, note_en):
     url = "https://api.weixin.qq.com/cgi-bin/message/template/send?access_token={}".format(access_token)
     week_list = ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"]
     year = localtime().tm_year
@@ -239,6 +236,7 @@ if __name__ == "__main__":
     # 传入地区获取天气信息
     region = config["region"]
     weather, temp, wind_dir, text1, text2 = get_weather(region)
+    # text =  config["text"]
     note_ch = config["note_ch"]
     note_en = config["note_en"]
     if note_ch == "" and note_en == "":
