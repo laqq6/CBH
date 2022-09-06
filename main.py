@@ -66,8 +66,8 @@ def get_weather(region):
     text2 = gg["daily"][1]["text"]
     warning_url = "https://devapi.qweather.com/v7/warning/now?location={}&key={}".format(location_id, key)
     hh = get(warning_url, headers=headers).json()
-    text3 = hh["warning"][0]["text"]
-    return weather, temp, wind_dir, text1, text2, text3
+    text3 = hh["warning"]["text"]
+    return weather, temp, wind_dir, text1, text2, text3,
 
 
 def get_birthday(birthday, year, today):
