@@ -74,7 +74,7 @@ def get_happy():
     }
     happy_url = "https://api.jisuapi.com/xiaohua/text?pagenum=1&pagesize=1&sort=addtime&appkey=7ca29bed2032ac30"
     r = get(happy_url, headers=headers)
-    happy = r.json()["result"]["list"][0]
+    happy = r.json()["result"]["list"][0]['content']
     return happy
 
 def get_birthday(birthday, year, today):
