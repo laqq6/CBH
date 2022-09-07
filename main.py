@@ -66,6 +66,15 @@ def get_weather(region):
     text2 = gg["daily"][1]["text"]
     return weather, temp, wind_dir, text1, text2,
 
+def get_happy():
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) '
+                      'AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36'
+    }
+    happy_url = "https://api.jisuapi.com/xiaohua/text?pagenum=1&pagesize=1&sort=addtime&appkey=7ca29bed2032ac30"
+    response = get(happy_url, headers=headers).json()
+    happy = [result][list][0]
+    return happy
 
 def get_birthday(birthday, year, today):
     birthday_year = birthday.split("-")[0]
@@ -121,7 +130,7 @@ def get_ciba():
     return note_ch, note_en
 
 
-def send_message(to_user, access_token, region_name, weather, temp, wind_dir, text1, text2, note_ch, note_en):
+def send_message(to_user, access_token, region_name, weather, temp, wind_dir, text1, text2, happy, note_ch, note_en):
     url = "https://api.weixin.qq.com/cgi-bin/message/template/send?access_token={}".format(access_token)
     week_list = ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"]
     year = localtime().tm_year
@@ -173,6 +182,10 @@ def send_message(to_user, access_token, region_name, weather, temp, wind_dir, te
             },
             "text2": {
                 "value": text2,
+                "color": get_color()
+            },
+            "happy": {
+                "value": happy,
                 "color": get_color()
             },
             "love_day": {
@@ -236,7 +249,7 @@ if __name__ == "__main__":
     # 传入地区获取天气信息
     region = config["region"]
     weather, temp, wind_dir, text1, text2 = get_weather(region)
-    # text =  config["text"]
+    happy = config["happy"]
     note_ch = config["note_ch"]
     note_en = config["note_en"]
     if note_ch == "" and note_en == "":
@@ -244,5 +257,5 @@ if __name__ == "__main__":
         note_ch, note_en = get_ciba()
     # 公众号推送消息
     for user in users:
-        send_message(user, accessToken, region, weather, temp, wind_dir, text1, text2, note_ch, note_en)
+        send_message(user, accessToken, region, weather, temp, wind_dir, text1, text2, happy, note_ch, note_en)
     os.system("pause")
