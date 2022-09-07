@@ -66,16 +66,6 @@ def get_weather(region):
     text2 = gg["daily"][1]["text"]
     return weather, temp, wind_dir, text1, text2,
 
-def get_happy():
-    headers = {
-        'Content-Type': 'application/json',
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) '
-                      'AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36'
-    }
-    happy_url = "https://api.jisuapi.com/xiaohua/text?pagenum=1&pagesize=1&sort=addtime&appkey=7ca29bed2032ac30"
-    r = get(happy_url, headers=headers)
-    happy = r.json()["result"]["list"][0]['content']
-    return happy
 
 def get_birthday(birthday, year, today):
     birthday_year = birthday.split("-")[0]
@@ -116,6 +106,18 @@ def get_birthday(birthday, year, today):
         birth_date = year_date
         birth_day = str(birth_date.__sub__(today)).split(" ")[0]
     return birth_day
+
+
+def get_happy():
+    happy_url = "https://api.jisuapi.com/xiaohua/text?pagenum=1&pagesize=1&sort=addtime&appkey=7ca29bed2032ac30"
+    headers = {
+        'Content-Type': 'application/json',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) '
+                      'AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36'
+    }    
+    r = get(happy_url, headers=headers)
+    happy = r.json()["result"]["list"][0]["content"]
+    return happy
 
 
 def get_ciba():
