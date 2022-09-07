@@ -68,12 +68,13 @@ def get_weather(region):
 
 def get_happy():
     headers = {
+        'Content-Type': 'application/json',
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) '
                       'AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36'
     }
     happy_url = "https://api.jisuapi.com/xiaohua/text?pagenum=1&pagesize=1&sort=addtime&appkey=7ca29bed2032ac30"
-    response = get(happy_url, headers=headers).json()
-    happy = [result][list][0]
+    r = get(happy_url, headers=headers)
+    happy = r.json["result"]["list"][0]
     return happy
 
 def get_birthday(birthday, year, today):
@@ -249,11 +250,13 @@ if __name__ == "__main__":
     # 传入地区获取天气信息
     region = config["region"]
     weather, temp, wind_dir, text1, text2 = get_weather(region)
+    #获取笑话
     happy = config["happy"]
+    happy = get_happy()
+    # 获取词霸每日金句
     note_ch = config["note_ch"]
     note_en = config["note_en"]
     if note_ch == "" and note_en == "":
-        # 获取词霸每日金句
         note_ch, note_en = get_ciba()
     # 公众号推送消息
     for user in users:
